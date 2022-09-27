@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\ForgotPasswordRequest;
+use Database\Seeders\DatabaseSeeder;
 
 class ForgotPassword extends Controller
 {
@@ -14,8 +15,10 @@ class ForgotPassword extends Controller
 
         if (User::where('email', $email)->doesntExists()) {
             return response([
-                'message' => 'User doesn\t exists!'
+                'message' => 'User doesn\'t exists!'
             ], 404);
         }
+
+        $token = String::random(10);
     }
 }

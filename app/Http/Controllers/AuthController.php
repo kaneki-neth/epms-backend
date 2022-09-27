@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -46,10 +47,10 @@ class AuthController extends Controller
         if (!$user || !Hash::check($fields['password'], $user->password)) {
             return Response()->json([
                 'message' => 'Wrong Credentials'
-            ]);
+            ], 401);
         }
 
-        $token = $user->createToken('authToken')->plainTextToken;
+        $token = $user->createToken('token')->plainTextToken;
 
         return Response()->json([
             'message' => 'You are logged in',
@@ -65,6 +66,13 @@ class AuthController extends Controller
         return Response()->json([
             'message' => "Logged out successfully",
             'status' => 201
+        ]);
+    }
+
+    public function getAuthenticatedUser(): JsonResponse
+    {
+        return response()->json([
+            'user' => Auth::user()
         ]);
     }
 }
