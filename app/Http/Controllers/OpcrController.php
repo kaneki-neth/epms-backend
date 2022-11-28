@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Office;
-use Illuminate\Http\JsonResponse;
+use App\Models\opcr;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class OfficeController extends Controller
+class OpcrController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +16,11 @@ class OfficeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $office = Office::all();
+        $opcr = opcr::all();
 
         return response()->json([
-            'data' => $office,
-            'total' => $office->count()
+            'data' => $opcr,
+            'total' => $opcr->count()
         ], 200);
     }
 
@@ -32,14 +32,20 @@ class OfficeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        Office::create($request->validate([
-            'name' => 'required',
-            'description' => 'required'
+        opcr::create($request->validate([
+            'accomplishment' => 'required',
+            'rate_quality' => 'required',
+            'rate_efficiency' => 'required',
+            'rate_timeliness' => 'required',
+            'average_score' => 'required',
+            'remarks' => 'required',
+            'date_rated' => 'required',
+            'date_approved' => 'required'
         ]));
 
         return response()->json([
             'success' => true,
-            'message' => 'Office added successfully',
+            'message' => 'OPCR added successfully',
         ], Response::HTTP_CREATED);
     }
 
@@ -51,7 +57,7 @@ class OfficeController extends Controller
      */
     public function show($id)
     {
-        return Office::find($id);
+        return opcr::find($id);
     }
 
     /**
@@ -63,12 +69,12 @@ class OfficeController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $office = Office::find($id);
-        $office->update($request->all());
+        $opcr = opcr::find($id);
+        $opcr->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Office updated successfully'
+            'message' => 'OPCR updated successfully'
         ], 200);
     }
 
@@ -80,11 +86,11 @@ class OfficeController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        Office::destroy($id);
+        opcr::destroy($id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Office successfully deleted'
+            'message' => 'OPCR successfully deleted'
         ], 200);
     }
 }

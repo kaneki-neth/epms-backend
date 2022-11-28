@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOfficesTable extends Migration
+class CreateSpecificActionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateOfficesTable extends Migration
      */
     public function up()
     {
-        Schema::create('offices', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('name', 20);
+        Schema::create('specific_actions', function (Blueprint $table) {
+            $table->id();
             $table->string('description');
+            $table->string('output_indicator');
+            $table->float('budget', 15, 2);
+            $table->foreignId('performance_target_id')
+                ->constrained('performance_targets');
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateOfficesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('offices');
+        Schema::dropIfExists('specific_actions');
     }
 }

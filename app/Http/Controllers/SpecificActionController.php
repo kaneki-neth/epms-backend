@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Office;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\SpecificAction;
+use Illuminate\Http\JsonResponse;
+use PharIo\Version\SpecificMajorVersionConstraint;
 use Symfony\Component\HttpFoundation\Response;
 
-class OfficeController extends Controller
+class SpecificActionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +17,11 @@ class OfficeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $office = Office::all();
+        $specificAction = SpecificAction::all();
 
         return response()->json([
-            'data' => $office,
-            'total' => $office->count()
+            'data' => $specificAction,
+            'total' => $specificAction->count()
         ], 200);
     }
 
@@ -32,14 +33,15 @@ class OfficeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        Office::create($request->validate([
-            'name' => 'required',
-            'description' => 'required'
+        SpecificAction::create($request->validate([
+            'description' => 'required',
+            'output_indicator' => 'required',
+            'budget' => 'required'
         ]));
 
         return response()->json([
             'success' => true,
-            'message' => 'Office added successfully',
+            'message' => 'Specific Acation created successfully',
         ], Response::HTTP_CREATED);
     }
 
@@ -51,7 +53,7 @@ class OfficeController extends Controller
      */
     public function show($id)
     {
-        return Office::find($id);
+        return SpecificAction::find($id);
     }
 
     /**
@@ -63,12 +65,12 @@ class OfficeController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $office = Office::find($id);
-        $office->update($request->all());
+        $specificAction = SpecificAction::find($id);
+        $specificAction->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Office updated successfully'
+            'message' => 'Updated Specific Action successfully'
         ], 200);
     }
 
@@ -80,11 +82,11 @@ class OfficeController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        Office::destroy($id);
+        SpecificAction::destroy($id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Office successfully deleted'
+            'message' => 'Specific Action successfully deleted'
         ], 200);
     }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Office;
-use Illuminate\Http\JsonResponse;
+use App\Models\Designation;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class OfficeController extends Controller
+class DesignationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +16,11 @@ class OfficeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $office = Office::all();
+        $designation = Designation::all();
 
         return response()->json([
-            'data' => $office,
-            'total' => $office->count()
+            'data' => $designation,
+            'total' => $designation->count()
         ], 200);
     }
 
@@ -32,14 +32,13 @@ class OfficeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        Office::create($request->validate([
-            'name' => 'required',
-            'description' => 'required'
+        Designation::create($request->validate([
+            'name' => 'required'
         ]));
 
         return response()->json([
             'success' => true,
-            'message' => 'Office added successfully',
+            'message' => 'Designation created.'
         ], Response::HTTP_CREATED);
     }
 
@@ -51,7 +50,7 @@ class OfficeController extends Controller
      */
     public function show($id)
     {
-        return Office::find($id);
+        return Designation::find($id);
     }
 
     /**
@@ -63,12 +62,12 @@ class OfficeController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $office = Office::find($id);
-        $office->update($request->all());
+        $designation = Designation::find($id);
+        $designation->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Office updated successfully'
+            'message' => 'Designation updated successfully'
         ], 200);
     }
 
@@ -80,11 +79,11 @@ class OfficeController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        Office::destroy($id);
+        Designation::destroy($id);
 
         return response()->json([
-            'success' => true,
-            'message' => 'Office successfully deleted'
+            'status' => true,
+            'message' => 'Designation deleted successfully'
         ], 200);
     }
 }

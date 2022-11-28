@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use App\Models\User;
+use App\Models\StratPlan;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller
+class StratPlanController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return User::all();
+        $stratPlan = StratPlan::all();
+
+        return response()->json([
+            'data' => $stratPlan,
+            'total' => $stratPlan->count()
+        ], 200);
     }
 
     /**
@@ -29,17 +32,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ];
-        return User::create($data);
+        StratPlan::create($request->validate([
+            'description' => 'required'
+        ]));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Strat Plan created.'
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -50,7 +50,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::find($id);
+        return StratPlan::find($id);
     }
 
     /**
@@ -62,24 +62,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $user = User::find($id);
-        $user->update($request->all());
+        $stratPlan = StratPlan::find($id);
+        $stratPlan->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Updated Successfully'
+            'message' => 'Strat Plan updated Successfully'
         ], 200);
-    }
-
-    /**
-     * Search for a name.
-     *
-     * @param  str  $name
-     * @return \Illuminate\Http\Response
-     */
-    public function search($name)
-    {
-        return User::where('name', 'like', '%' . $name . '%')->get();
     }
 
     /**
@@ -88,8 +77,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        return User::destroy($id);
+        StratPlan::destroy($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Strat Plan deleted.'
+        ], 200);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOfficesTable extends Migration
+class CreateStrategicObjectivesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateOfficesTable extends Migration
      */
     public function up()
     {
-        Schema::create('offices', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('name', 20);
+        Schema::create('strategic_objectives', function (Blueprint $table) {
+            $table->id();
             $table->string('description');
+            $table->foreignId('sector_id')
+                ->constrained('sectors');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateOfficesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('offices');
+        Schema::dropIfExists('strategic_objectives');
     }
 }

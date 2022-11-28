@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Office;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\PerformanceMeasure;
 use Symfony\Component\HttpFoundation\Response;
 
-class OfficeController extends Controller
+class PerformanceMeasureController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +16,11 @@ class OfficeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $office = Office::all();
+        $performanceMeasure = PerformanceMeasure::all();
 
         return response()->json([
-            'data' => $office,
-            'total' => $office->count()
+            'data' => $performanceMeasure,
+            'total' => $performanceMeasure->count()
         ], 200);
     }
 
@@ -30,16 +30,16 @@ class OfficeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
-        Office::create($request->validate([
-            'name' => 'required',
-            'description' => 'required'
+        PerformanceMeasure::create($request->validate([
+            'year' => 'required',
+            'nominal_target' => 'required',
         ]));
 
         return response()->json([
             'success' => true,
-            'message' => 'Office added successfully',
+            'message' => 'Performance Measure created successfully',
         ], Response::HTTP_CREATED);
     }
 
@@ -51,7 +51,7 @@ class OfficeController extends Controller
      */
     public function show($id)
     {
-        return Office::find($id);
+        return PerformanceMeasure::find($id);
     }
 
     /**
@@ -63,12 +63,12 @@ class OfficeController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $office = Office::find($id);
-        $office->update($request->all());
+        $performanceMeasure = PerformanceMeasure::find($id);
+        $performanceMeasure->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Office updated successfully'
+            'message' => 'Updated Performance Measure successfully'
         ], 200);
     }
 
@@ -80,11 +80,11 @@ class OfficeController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        Office::destroy($id);
+        PerformanceMeasure::destroy($id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Office successfully deleted'
+            'message' => 'Performance Measure successfully deleted'
         ], 200);
     }
 }

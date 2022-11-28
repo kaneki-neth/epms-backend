@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Office;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\StratPlanType;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class OfficeController extends Controller
+class StratPlanTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +16,11 @@ class OfficeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $office = Office::all();
+        $stratPlanType = StratPlanType::all();
 
         return response()->json([
-            'data' => $office,
-            'total' => $office->count()
+            'data' => $stratPlanType,
+            'total' => $stratPlanType->count()
         ], 200);
     }
 
@@ -32,14 +32,13 @@ class OfficeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        Office::create($request->validate([
-            'name' => 'required',
-            'description' => 'required'
+        StratPlanType::create($request->validate([
+            'name' => 'required'
         ]));
 
         return response()->json([
             'success' => true,
-            'message' => 'Office added successfully',
+            'message' => 'Strat Plan type created successfully'
         ], Response::HTTP_CREATED);
     }
 
@@ -51,7 +50,7 @@ class OfficeController extends Controller
      */
     public function show($id)
     {
-        return Office::find($id);
+        return StratPlanType::find($id);
     }
 
     /**
@@ -61,14 +60,14 @@ class OfficeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $id)
     {
-        $office = Office::find($id);
-        $office->update($request->all());
+        $stratPlanType = StratPlanType::find($id);
+        $stratPlanType->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Office updated successfully'
+            'message' => 'Strat Plan type updated successfully.'
         ], 200);
     }
 
@@ -80,11 +79,11 @@ class OfficeController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        Office::destroy($id);
+        StratPlanType::destroy($id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Office successfully deleted'
+            'message' => 'Strat Plan type deleted successfully.'
         ], 200);
     }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Office;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Models\StrategicObjective;
 use Symfony\Component\HttpFoundation\Response;
 
-class OfficeController extends Controller
+class StrategicObjectiveController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +16,11 @@ class OfficeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $office = Office::all();
+        $stratObj = StrategicObjective::all();
 
         return response()->json([
-            'data' => $office,
-            'total' => $office->count()
+            'data' => $stratObj,
+            'total' => $stratObj->count()
         ], 200);
     }
 
@@ -32,14 +32,13 @@ class OfficeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        Office::create($request->validate([
-            'name' => 'required',
+        StrategicObjective::create($request->validate([
             'description' => 'required'
         ]));
 
         return response()->json([
             'success' => true,
-            'message' => 'Office added successfully',
+            'message' => 'Strategic objective created successfully',
         ], Response::HTTP_CREATED);
     }
 
@@ -51,7 +50,7 @@ class OfficeController extends Controller
      */
     public function show($id)
     {
-        return Office::find($id);
+        return StrategicObjective::find($id);
     }
 
     /**
@@ -63,12 +62,12 @@ class OfficeController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $office = Office::find($id);
-        $office->update($request->all());
+        $stratObj = StrategicObjective::find($id);
+        $stratObj->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Office updated successfully'
+            'message' => 'Strategic objective updated Successfully'
         ], 200);
     }
 
@@ -80,11 +79,11 @@ class OfficeController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        Office::destroy($id);
+        StrategicObjective::destroy($id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Office successfully deleted'
+            'message' => 'Strategic objective successfully deleted'
         ], 200);
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOfficesTable extends Migration
+class CreateCoreFunctionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateOfficesTable extends Migration
      */
     public function up()
     {
-        Schema::create('offices', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('name', 20);
+        Schema::create('core_functions', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
             $table->string('description');
+            $table->foreignId('major_final_output_id')
+                ->constrained('major_final_outputs');
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateOfficesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('offices');
+        Schema::dropIfExists('core_functions');
     }
 }

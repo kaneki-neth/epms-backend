@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Http\JsonResponse;
+use App\Models\Service;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller
+class ServiceController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return User::all();
+        $service = Service::all();
+
+        return response()->json([
+            'data' => $service,
+            'total' => $service->count()
+        ], 200);
     }
 
     /**
@@ -27,19 +30,17 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        $request->validate([
+        Service::create($request->validate([
             'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ];
-        return User::create($data);
+            'description' => 'required'
+        ]));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Service added successfully',
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -50,7 +51,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::find($id);
+        return Service::find($id);
     }
 
     /**
@@ -62,24 +63,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $user = User::find($id);
-        $user->update($request->all());
+        $service = Service::find($id);
+        $service->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Updated Successfully'
+            'message' => 'Service updated successfully'
         ], 200);
-    }
-
-    /**
-     * Search for a name.
-     *
-     * @param  str  $name
-     * @return \Illuminate\Http\Response
-     */
-    public function search($name)
-    {
-        return User::where('name', 'like', '%' . $name . '%')->get();
     }
 
     /**
@@ -88,8 +78,13 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
-        return User::destroy($id);
+        Service::destroy($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Service successfully deleted'
+        ], 200);
     }
 }

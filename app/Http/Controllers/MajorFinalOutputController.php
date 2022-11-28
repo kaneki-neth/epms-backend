@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Office;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\MajorFinalOutput;
+use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class OfficeController extends Controller
+class MajorFinalOutputController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,11 +16,11 @@ class OfficeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $office = Office::all();
+        $mfo = MajorFinalOutput::all();
 
         return response()->json([
-            'data' => $office,
-            'total' => $office->count()
+            'data' => $mfo,
+            'total' => $mfo->count()
         ], 200);
     }
 
@@ -32,14 +32,13 @@ class OfficeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        Office::create($request->validate([
-            'name' => 'required',
+        MajorFinalOutput::create($request->validate([
             'description' => 'required'
         ]));
 
         return response()->json([
             'success' => true,
-            'message' => 'Office added successfully',
+            'message' => 'MFO added successfully',
         ], Response::HTTP_CREATED);
     }
 
@@ -51,7 +50,7 @@ class OfficeController extends Controller
      */
     public function show($id)
     {
-        return Office::find($id);
+        return MajorFinalOutput::find($id);
     }
 
     /**
@@ -63,12 +62,12 @@ class OfficeController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $office = Office::find($id);
-        $office->update($request->all());
+        $mfo = MajorFinalOutput::find($id);
+        $mfo->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Office updated successfully'
+            'message' => 'MFO updated successfully'
         ], 200);
     }
 
@@ -80,11 +79,11 @@ class OfficeController extends Controller
      */
     public function destroy($id): JsonResponse
     {
-        Office::destroy($id);
+        MajorFinalOutput::destroy($id);
 
         return response()->json([
             'success' => true,
-            'message' => 'Office successfully deleted'
+            'message' => 'MFO successfully deleted'
         ], 200);
     }
 }

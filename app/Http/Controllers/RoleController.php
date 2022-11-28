@@ -3,13 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::all();
+        return Role::all();
     }
 
     /**
@@ -27,19 +25,16 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-        ]);
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password)
-        ];
-        return User::create($data);
+        Role::create($request->validate([
+            'name' => 'required'
+        ]));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role created successfully',
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -50,7 +45,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::find($id);
+        return Role::find($id);
     }
 
     /**
@@ -62,24 +57,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id): JsonResponse
     {
-        $user = User::find($id);
-        $user->update($request->all());
+        $role = role::find($id);
+        $role->update($request->all());
 
         return response()->json([
             'success' => true,
-            'message' => 'Updated Successfully'
+            'message' => 'Role updated successfully'
         ], 200);
-    }
-
-    /**
-     * Search for a name.
-     *
-     * @param  str  $name
-     * @return \Illuminate\Http\Response
-     */
-    public function search($name)
-    {
-        return User::where('name', 'like', '%' . $name . '%')->get();
     }
 
     /**
@@ -90,6 +74,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        return User::destroy($id);
+        Role::destroy($id);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Role successfully deleted'
+        ], 200);
     }
 }
